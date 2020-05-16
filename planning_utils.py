@@ -77,10 +77,10 @@ class Action(Enum):
     EAST = (0, 1, 1)
     NORTH = (-1, 0, 1)
     SOUTH = (1, 0, 1)
-    UPLEFT = (-1, -1, 1.4)
-    UPRIGHT = (-1, 1, 1.4)
-    DOWNLEFT = (1, -1, 1.4)
-    DOWNRIGHT = (1, 1, 1.4)
+    NORTHWEST = (-1, -1, 1.4)
+    NORTHEAST = (-1, 1, 1.4)
+    SOUTHWEST = (1, -1, 1.4)
+    SOUTHEAST = (1, 1, 1.4)
     @property
     def cost(self):
         return self.value[2]
@@ -110,13 +110,13 @@ def valid_actions(grid, current_node):
     if y + 1 > m or grid[x, y + 1] == 1:
         valid_actions.remove(Action.EAST)
     if y - 1 < 0 or x - 1 < 0 or grid[x-1, y-1] == 1:
-        valid_actions.remove(Action.UPLEFT)
+        valid_actions.remove(Action.NORTHWEST)
     if y + 1 > m or x - 1 < 0 or grid[x-1, y+1] == 1:
-        valid_actions.remove(Action.UPRIGHT)
+        valid_actions.remove(Action.NORTHEAST)
     if y - 1 < 0 or x + 1 > n or grid[x+1, y-1] == 1:
-        valid_actions.remove(Action.DOWNLEFT)
+        valid_actions.remove(Action.SOUTHWEST)
     if y + 1 > m or x + 1 > n or grid[x+1, y+1] == 1:
-        valid_actions.remove(Action.DOWNRIGHT)
+        valid_actions.remove(Action.SOUTHEAST)
 	
     return valid_actions
 
@@ -131,16 +131,19 @@ def a_star(grid, h, start, goal):
 
     branch = {}
     found = False
-    
+    counter = 0
     while not queue.empty():
+        #print(counter)
+        #counter = counter + 1
         item = queue.get()
+        #print(item)
         current_node = item[1]
-        if current_node == start:
+        if current_node[0] == start[0] and current_node[1] == start[1]:
             current_cost = 0.0
         else:              
             current_cost = branch[current_node][0]
             
-        if current_node == goal:        
+        if current_node[0] == goal[0] and current_node[1] == goal[1]:        
             print('Found a path.')
             found = True
             break
